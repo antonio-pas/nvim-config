@@ -1,3 +1,3 @@
 require('opts')
-require('maps')
+require('remaps')
 require('plugins')

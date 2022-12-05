@@ -21,8 +21,13 @@ o.hidden = true
 o.wrap = false
 
 o.backup = true
+o.backupdir = "/home/antonio/nvimtmp/"
 o.fsync = true
-o.completeopt = 'longest,noselect,menu,menuone'
+o.completeopt = 'noinsert,noselect,menuone'
 o.termguicolors = true
 
-vim.cmd('colorscheme habamax')
+g.netrw_winsize = 30
+g.netrw_liststyle = 3
+g.netrw_banner = 0
+
+vim.cmd('colorscheme gruvbox')

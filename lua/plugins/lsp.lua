@@ -1,53 +1,25 @@
 local lsp = require('lspconfig')
-local luaSettings = {
-  Lua = {
-    runtime = {
-      version = 'LuaJIT',
-    },
-    diagnostics = {
-      globals = {'vim'},
-    },
-    workspace = {
-      library = vim.api.nvim_get_runtime_file("", true),
-    },
-    telemetry = {
-      enable = false,
-    },
-  },
-}
-local lsp_flags = {
-  debounce_text_changes = 150
-}
 local on_attach = function(_, bufnr)
-  vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
-  local bufopts = { noremap = true, silent = true, buffer = bufnr }
-  vim.keymap.set('n', '<leader>gd', vim.lsp.buf.definition, bufopts)
-  vim.keymap.set('n', '<leader>gD', vim.lsp.buf.declaration, bufopts)
-  vim.keymap.set('n', '<leader>h', vim.lsp.buf.hover, bufopts)
+  local map = require('map').nnoremap;
+  local bufopts = { buffer = bufnr }
+  map("<leader>g", ":lua vim.lsp.buf.definition()<cr>", bufopts)
+  map("<leader>gD",":lua vim.lsp.buf.declaration()<cr>", bufopts)
+  map("<leader>h", ":lua vim.lsp.buf.hover()<cr>", bufopts)
+  map("<leader>s", ":lua vim.lsp.buf.signature_help()<cr>", bufopts)
+  map("<leader>r", ":lua vim.lsp.buf.rename<cr>", bufopts)
+  map("<leader>ca", ":lua vim.lsp.buf.code_action<cr>", bufopts)
 end
 local capabilities = require('cmp_nvim_lsp')
   .default_capabilities(
   vim.lsp.protocol.make_client_capabilities())
-lsp.ccls.setup({
-  capabilities = capabilities,
-  flags = lsp_flags,
-  on_attach = on_attach,
-})
-lsp.emmet_ls.setup({
-  capabilities = capabilities,
-  flags = lsp_flags,
-  on_attach = on_attach,
-})
-lsp.html.setup({
-  capabilities = capabilities,
-  flags = lsp_flags,
-  on_attach = on_attach,
-})
-lsp.tsserver.setup({
-  capabilities = capabilities,
-  flags = lsp_flags,
-  on_attach = on_attach,
-})
+local servers = {'ccls', 'emmet_ls', 'html', 'tsserver'}
+for _, server in ipairs(servers) do
+  lsp[server].setup({
+    capabilities = capabilities,
+    on_attach = on_attach
+  })
+end
+
 lsp.rust_analyzer.setup({
   capabilities = capabilities,
   settings = {
@@ -57,12 +29,26 @@ lsp.rust_analyzer.setup({
       }
     }
   },
-  flags = lsp_flags,
   on_attach = on_attach,
 })
+
 lsp.sumneko_lua.setup({
   capabilities = capabilities,
-  settings = luaSettings,
-  flags = lsp_flags,
+  settings = {
+    Lua = {
+      runtime = {
+        version = 'LuaJIT',
+      },
+      diagnostics = {
+        globals = {'vim'},
+      },
+      workspace = {
+        library = vim.api.nvim_get_runtime_file("", true),
+      },
+      telemetry = {
+        enable = false,
+      },
+    },
+  },
   on_attach = on_attach,
 })
