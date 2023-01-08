@@ -23,11 +23,9 @@ o.wrap = false
 o.backup = true
 o.backupdir = "/home/antonio/nvimtmp/"
 o.fsync = true
-o.completeopt = 'noinsert,noselect,menuone'
+o.completeopt = 'noinsert,noselect'
 o.termguicolors = true
+o.showmode = false
 
-g.netrw_winsize = 30
-g.netrw_liststyle = 3
-g.netrw_banner = 0
-
-vim.cmd('colorscheme gruvbox')
+g.loaded_netrw = 1
+g.loaded_netrwPlugin = 1

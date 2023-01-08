@@ -15,7 +15,7 @@ cmp.setup({
   formatting = {
     format = lspkind.cmp_format({
       mode = 'both',
-      maxwidth = 50,
+      maxwidth = 30,
       ellipsis_char = '...',
     })
   },
@@ -26,10 +26,10 @@ cmp.setup({
     ['<C-e>'] = cmp.mapping.abort(),
     ['<CR>'] = cmp.mapping.confirm({ select = false }),
     ["<Tab>"] = cmp.mapping(function(fallback)
-      if cmp.visible() then
-        cmp.select_next_item()
-      elseif luasnip.expand_or_jumpable() then
+      if luasnip.expand_or_jumpable() then
         luasnip.expand_or_jump()
+      elseif cmp.visible() then
+        cmp.select_next_item()
       elseif has_words_before() then
         cmp.complete()
       else
@@ -50,6 +50,7 @@ cmp.setup({
   sources = cmp.config.sources({
     { name = 'nvim_lsp' },
     { name = 'luasnip' },
+    { name = 'crates' },
   }, {
     { name = 'buffer' },
   })
