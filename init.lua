@@ -17,7 +17,7 @@ o.smartcase = true
 o.showmode = false
 o.hidden = true
 o.wrap = false
-o.scrolloff = 5
+o.scrolloff = 10
 o.pumheight = 15
 
 o.completeopt = "noinsert,menuone,menu"
@@ -28,18 +28,25 @@ o.cursorline = true
 
 vim.opt.whichwrap:append "<>[]hl"
 g.mapleader = " "
+--vim.api.nvim_create_autocmd("TermOpen", { pattern = "*", command = "setlocal nonu" })
+vim.cmd [[autocmd TermOpen * setlocal nonu|setlocal norelativenumber]]
 require('packer').startup(function(use)
   use 'wbthomason/packer.nvim'
   use 'neovim/nvim-lspconfig'
   use 'nvim-lua/plenary.nvim'
   use 'nvim-tree/nvim-web-devicons'
   use 'onsails/lspkind.nvim'
+  use 'akinsho/bufferline.nvim'
+  use 'numToStr/Comment.nvim'
 
   use 'phaazon/hop.nvim'
   use 'nvim-treesitter/nvim-treesitter'
   use 'nvim-telescope/telescope.nvim'
   use 'nvim-lualine/lualine.nvim'
   use 'windwp/nvim-autopairs'
+  use 'windwp/nvim-ts-autotag'
+  use 'https://git.sr.ht/~whynothugo/lsp_lines.nvim'
+  use 'karb94/neoscroll.nvim'
 
   use 'hrsh7th/cmp-nvim-lsp'
   use 'hrsh7th/cmp-buffer'
@@ -54,18 +61,29 @@ require('packer').startup(function(use)
   use 'saadparwaiz1/cmp_luasnip'
 
   use 'rebelot/kanagawa.nvim'
+  use 'navarasu/onedark.nvim'
 end)
-
+require('onedark').setup({
+  highlights = {
+    ["@constructor"] = { fmt = "none" },
+    ["@text.title"] = { fmt = "none" }
+  }
+})
+require('onedark').load()
 require('nvim-treesitter.configs').setup({
   highlight = { enable = true },
-  indent = { enable = true }
+  indent = { enable = true },
+  autotag = { enable = true }
 })
-require('nvim-autopairs').setup({fast_wrap={}})
+require('nvim-autopairs').setup({ fast_wrap = {} })
 require('hop').setup()
+require('neoscroll').setup()
 require('fidget').setup()
+require('bufferline').setup()
+require('lsp_lines').setup()
+require('Comment').setup()
 require('lualine').setup {
   options = {
-    icons_enabled = true,
     theme = 'auto',
     component_separators = { left = '', right = '' },
     section_separators = { left = '', right = '' },
@@ -73,51 +91,14 @@ require('lualine').setup {
       statusline = {},
       winbar = {},
     },
-    ignore_focus = {},
-    always_divide_middle = true,
-    globalstatus = false,
-    refresh = {
-      statusline = 1000,
-      tabline = 1000,
-      winbar = 1000,
-    }
+    globalstatus = true,
   },
-  sections = {
-    lualine_a = {},
-    lualine_b = {},
-    lualine_c = { {
-      function()
-        return '▊'
-      end,
-      color = { fg = "#7e9cd8" }, -- Sets highlighting of component
-      padding = { left = 0, right = 1 }, -- We don't need space before this
-    }, 'progress', 'location', 'diagnostic', { 'filename', color = { fg = "#d27e99" } }, { function() return '%=' end }, },
-    lualine_x = { { 'encoding', color = { fg = '#957fb8' } }, 'diff', { 'branch', color = { fg = "#ffa066" } } },
-    lualine_y = {},
-    lualine_z = {}
-  },
-  inactive_sections = {
-    lualine_a = {},
-    lualine_b = {},
-    lualine_c = { 'filename' },
-    lualine_x = { 'location' },
-    lualine_y = {},
-    lualine_z = {}
-  },
-  tabline = {},
-  winbar = {},
-  inactive_winbar = {},
-  extensions = {}
 }
-require('telescope').setup({
-  defaults = {
-    --borderchars = { "─", "│", "─", "│", "┌", "┐", "┘", "└" }
-  },
-})
+require('telescope').setup({})
 
-vim.cmd [[colorscheme kanagawa]]
 local lsp = require('lspconfig')
 local servers = {
+  svelte = {},
   cssls = {},
   eslint = {},
   lua_ls = {
@@ -140,7 +121,7 @@ local servers = {
   },
   rust_analyzer = {
     settings = {
-      ['rust-analyzer'] = {
+          ['rust-analyzer'] = {
         signatureInfo = {
           detail = "parameters"
         }
@@ -177,22 +158,24 @@ local function on_attach(_, bufnr)
   map('n', '<leader>fm', vim.lsp.buf.format, opts)
   map('n', '<leader>ca', vim.lsp.buf.code_action, opts)
 end
+
+local opts = { noremap = true, silent = true }
+local telescope = require('telescope.builtin')
+map('n', '<C-p>', ':bprev<cr>', opts)
+map('n', '<C-n>', ':bnext<cr>', opts)
+map('n', '<leader>hw', ':HopWord<cr>', opts)
+map('n', '<leader>ha', ':HopAnywhere<cr>', opts)
+map('n', '<leader>ff', telescope.find_files, opts)
+map('n', '<leader>dd', telescope.diagnostics, opts)
+map('n', '<leader>t', ':Telescope<CR>', opts)
+map('t', '<esc>', '<C-\\><C-n>', opts)
+
+
 local capabilities = require('cmp_nvim_lsp').default_capabilities()
 for name, settings in pairs(servers) do
   settings = vim.tbl_extend("keep", settings, { on_attach = on_attach, capabilities = capabilities })
   lsp[name].setup(settings)
 end
-local opts = { noremap = true, silent = true }
-map('n', '<C-p>', ':bprev<cr>', opts)
-map('n', '<C-n>', ':bnext<cr>', opts)
-map('n', '<leader>hw', ':HopWord<cr>', opts)
-map('n', '<leader>ha', ':HopAnywhere<cr>', opts)
-local telescope = require('telescope.builtin')
-map('n', '<leader>ff', telescope.find_files, opts)
-map('n', '<leader>dd', telescope.diagnostics, opts)
-map('n', '<leader>t', ':Telescope<CR>', opts)
-local cmp = require('cmp')
-local luasnip = require('luasnip')
 local function border(hl_name)
   return {
     { "╭", hl_name }, -- ┌
@@ -206,6 +189,8 @@ local function border(hl_name)
   }
 end
 local lspkind = require('lspkind')
+local cmp = require('cmp')
+local luasnip = require('luasnip')
 
 cmp.setup({
   snippet = {
@@ -216,7 +201,7 @@ cmp.setup({
   formatting = {
     fields = { "kind", "abbr", "menu" },
     format = function(entry, vim_item)
-      local kind = require("lspkind").cmp_format({ mode = "symbol_text", maxwidth = 25, ellipsis_char = '…' })(entry, vim_item)
+      local kind = lspkind.cmp_format({ mode = "symbol_text", maxwidth = 25, ellipsis_char = '…' })(entry, vim_item)
       local strings = vim.split(kind.kind, "%s", { trimempty = true })
       kind.kind = strings[1] or ""
       kind.menu = strings[2] or ""
@@ -237,12 +222,12 @@ cmp.setup({
     },
   },
   mapping = cmp.mapping.preset.insert({
-    ['<C-b>'] = cmp.mapping.scroll_docs( -4),
-    ['<C-f>'] = cmp.mapping.scroll_docs(4),
-    ['<C-Space>'] = cmp.mapping.complete(),
-    ['<C-e>'] = cmp.mapping.abort(),
-    ['<CR>'] = cmp.mapping.confirm({ select = true }),
-    ["<Tab>"] = cmp.mapping(function(fallback)
+        ['<C-b>'] = cmp.mapping.scroll_docs(-4),
+        ['<C-f>'] = cmp.mapping.scroll_docs(4),
+        ['<C-Space>'] = cmp.mapping.complete(),
+        ['<C-e>'] = cmp.mapping.abort(),
+        ['<CR>'] = cmp.mapping.confirm({ select = true }),
+        ["<Tab>"] = cmp.mapping(function(fallback)
       if luasnip.expand_or_jumpable() then
         luasnip.expand_or_jump()
       elseif cmp.visible() then
@@ -253,12 +238,11 @@ cmp.setup({
         fallback()
       end
     end, { "i", "s" }),
-
-    ["<S-Tab>"] = cmp.mapping(function(fallback)
+        ["<S-Tab>"] = cmp.mapping(function(fallback)
       if cmp.visible() then
         cmp.select_prev_item()
-      elseif luasnip.jumpable( -1) then
-        luasnip.jump( -1)
+      elseif luasnip.jumpable(-1) then
+        luasnip.jump(-1)
       else
         fallback()
       end
