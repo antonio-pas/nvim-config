@@ -38,6 +38,7 @@ require('packer').startup(function(use)
   use 'onsails/lspkind.nvim'
   use 'akinsho/bufferline.nvim'
   use 'numToStr/Comment.nvim'
+  use 'christoomey/vim-tmux-navigator'
 
   use 'phaazon/hop.nvim'
   use 'nvim-treesitter/nvim-treesitter'
@@ -53,6 +54,7 @@ require('packer').startup(function(use)
   use 'hrsh7th/cmp-path'
   use 'hrsh7th/cmp-cmdline'
   use 'hrsh7th/nvim-cmp'
+  use 'kylechui/nvim-surround'
 
   use 'b0o/SchemaStore.nvim'
   use 'j-hui/fidget.nvim'
@@ -69,6 +71,7 @@ require('onedark').setup({
     ["@text.title"] = { fmt = "none" }
   }
 })
+require("nvim-surround").setup({})
 require('onedark').load()
 require('nvim-treesitter.configs').setup({
   highlight = { enable = true },
