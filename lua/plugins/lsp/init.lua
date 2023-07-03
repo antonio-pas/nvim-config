@@ -1,23 +1,36 @@
 return {
 	{
 		"neovim/nvim-lspconfig",
+    dependencies = {
+      { "folke/neodev.nvim", opts = {} },
+    },
 		opts = {
 			servers = {
 				svelte = {},
 				cssls = {},
 				eslint = {},
+        ccls = {},
 				lua_ls = {
 					settings = {
-						Lua = {
-							telemetry = {
-								enable = false,
-							},
+            Lua = {
+              runtime = {
+                version = 'LuaJIT',
+              },
+              diagnostics = {
+                globals = {'vim'},
+              },
+              workspace = {
+                library = vim.api.nvim_get_runtime_file("", true),
+              },
+              telemetry = {
+                enable = false,
+              },
               completion = {
                 callSnippet = "Replace"
               }
-						},
-					},
-				},
+            }
+          },
+        },
 				rust_analyzer = {
 					settings = {
 						["rust-analyzer"] = {
@@ -40,6 +53,22 @@ return {
 			},
 		},
 		config = function(_, opts)
+      local signs = { Error = " ", Warn = " ", Hint = " ", Info = " " }
+      for type, icon in pairs(signs) do
+        local hl = "DiagnosticSign" .. type
+        vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
+      end
+      vim.diagnostic.config({
+        virtual_text = {
+          source = "if_many",
+          prefix = "▎",
+        },
+        update_in_insert = false,
+        severity_sort = false,
+        float = {
+          source = "if_many",
+        },
+      })
 			local capabilities = vim.tbl_deep_extend(
 				"force",
 				{},

@@ -1,5 +1,4 @@
 return {
-  { "folke/neodev.nvim", opts = {}, dependencies = {"neovim/nvim-lspconfig"} },
 	{ "numToStr/Comment.nvim", opts = {} },
 	{ "phaazon/hop.nvim", opts = {} },
 	{ "kylechui/nvim-surround", opts = {} },
