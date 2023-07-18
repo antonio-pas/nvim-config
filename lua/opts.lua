@@ -20,6 +20,8 @@ o.hidden = true
 o.wrap = false
 o.scrolloff = 10
 o.pumheight = 15
+o.timeout = true
+o.timeoutlen = 300
 
 -- ui changes
 o.completeopt = "noinsert,menuone,menu"
@@ -28,9 +30,15 @@ o.showmode = false
 o.signcolumn = "yes"
 o.cursorline = true
 o.termguicolors = true
+vim.opt.fillchars:append("vert: ")
+--vim.cmd([[set fillchars+=vert:\ ]])
 
 -- other
 o.fsync = true
+o.title = true
+o.titlestring = "nvim - \"%f\""
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
 vim.opt.whichwrap:append("<>[]hl")
 g.mapleader = " "
 

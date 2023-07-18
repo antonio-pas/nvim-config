@@ -1,12 +1,12 @@
 local function border(hl_name)
 	return {
-		{ "╭", hl_name }, -- ┌
+		{ "┌", hl_name }, -- ╭
 		{ "─", hl_name },
-		{ "╮", hl_name }, -- ┐
+		{ "┐", hl_name }, -- ╮
 		{ "│", hl_name },
-		{ "╯", hl_name }, -- ┘
+		{ "┘", hl_name }, -- ╯
 		{ "─", hl_name },
-		{ "╰", hl_name }, -- └
+		{ "└", hl_name }, -- ╰
 		{ "│", hl_name },
 	}
 end
@@ -51,16 +51,16 @@ return {
 					end,
 				},
 				window = {
-					completion = {
-						border = border("Comment"),
-						winhighlight = "Normal:Normal,CursorLine:CursorLine",
-						scrollbar = "",
-					},
-					documentation = {
-						border = border("Comment"),
-						winhighlight = "Normal:Normal",
-						scrollbar = "",
-					},
+					-- completion = {
+					-- 	border = border("Comment"),
+					-- 	winhighlight = "Normal:Normal,CursorLine:CursorLine",
+					-- 	scrollbar = "",
+					-- },
+					-- documentation = {
+					-- 	border = border("Comment"),
+					-- 	winhighlight = "Normal:Normal",
+					-- 	scrollbar = "",
+					-- },
 				},
 				mapping = cmp.mapping.preset.insert({
 					["<C-b>"] = cmp.mapping.scroll_docs(-4),

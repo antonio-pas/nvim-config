@@ -1,15 +1,22 @@
 return {
-	{
-		"navarasu/onedark.nvim",
-		opts = {
-			highlights = {
-				["@constructor"] = { fmt = "none" },
-				["@text.title"] = { fmt = "none" },
-			},
-		},
-		config = function(_, opts)
-			require("onedark").setup(opts)
-			vim.cmd([[colorscheme onedark]])
-		end,
-	},
+  {
+    "navarasu/onedark.nvim",
+    opts = {
+      highlights = {
+        ["@constructor"] = { fmt = "none" },
+        ["@text.title"] = { fmt = "none" },
+      },
+    },
+    config = function(_, opts)
+      require("onedark").setup(opts)
+      -- vim.cmd([[colorscheme onedark]])
+    end,
+  },
+  {
+    "sainnhe/gruvbox-material",
+    priority = 1000,
+    config = function(_, _)
+      vim.cmd([[colorscheme gruvbox-material]])
+    end
+  }
 }

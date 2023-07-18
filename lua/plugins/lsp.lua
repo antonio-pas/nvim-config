@@ -64,7 +64,7 @@ return {
           prefix = "▎",
         },
         update_in_insert = false,
-        severity_sort = false,
+        severity_sort = true,
         float = {
           source = "if_many",
         },
@@ -75,8 +75,32 @@ return {
 				vim.lsp.protocol.make_client_capabilities(),
 				require("cmp_nvim_lsp").default_capabilities()
 			)
-			require("util").on_attach(function(client, buffer)
-				require("plugins.lsp.keymaps").on_attach(client, buffer)
+			require("util").on_attach(function(_, buffer)
+        require("which-key").register({
+          d = {
+            name = "diagnostic",
+            a = { "<cmd>Telescope diagnostics<cr>", "Show All Diagnostics" },
+            o = { function() vim.diagnostic.open_float(nil, { scope="cursor" }) end, "Open Diagnostic On Current Line" },
+            n = { vim.diagnostic.get_next, "Go to Next Diagnostic" },
+            p = { vim.diagnostic.get_prev, "Go to Previous Diagnostic" },
+          },
+          g = {
+            name = "go to",
+            d = { vim.lsp.buf.definition, "Go to Definition" },
+            D = { vim.lsp.buf.definition, "Go to Declaration" }
+          },
+          a = {
+            name = "actions",
+            r = { vim.lsp.buf.rename, "Rename Token" },
+            f = { vim.lsp.buf.format, "Format Document" },
+            c = { vim.lsp.buf.code_action, "Code Action" },
+          },
+          i = {
+            name = "info",
+            h = { vim.lsp.buf.hover, "Hover Info" },
+            s = { vim.lsp.buf.signature_help, "Signature Help"}
+          }
+        }, { prefix = "<leader>", buffer = buffer })
 			end)
 			for name, server_options in pairs(opts.servers) do
 				local settings = vim.tbl_extend("force", server_options, { capabilities = capabilities })
