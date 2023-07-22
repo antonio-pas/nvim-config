@@ -10,7 +10,14 @@ return {
         separator_at_end = false,
       },
       sidebar_filetypes = { NvimTree = true }
-    }
+    },
+    config = function (_, opts)
+      require("barbar").setup(opts)
+      require("which-key").register({
+        ["<C-p>"] = { "<cmd>BufferPrevious<cr>", "Previous buffer" },
+        ["<C-n>"] = { "<cmd>BufferNext<cr>", "Next buffer" },
+      }, {})
+    end
   },
   { "lewis6991/gitsigns.nvim", opts = {} },
   {

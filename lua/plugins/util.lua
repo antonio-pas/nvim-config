@@ -10,8 +10,6 @@ return {
     config = function(_, _)
       local wk = require("which-key")
       wk.register({
-        ["<C-p>"] = { "<cmd>bprev<cr>", "Previous buffer" },
-        ["<C-n>"] = { "<cmd>bnext<cr>", "Next buffer" },
         ["<leader>q"] = { "<cmd>qa<cr>", "Quit" },
         ["<leader>l"] = { "<cmd>Telescope oldfiles<cr>", "Recent Files" }
       })
