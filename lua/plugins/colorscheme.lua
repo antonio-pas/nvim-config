@@ -16,7 +16,18 @@ return {
     "sainnhe/gruvbox-material",
     priority = 1000,
     config = function(_, _)
-      vim.cmd([[colorscheme gruvbox-material]])
+      --vim.cmd([[colorscheme gruvbox-material]])
+    end
+  },
+  {
+    "craftzdog/solarized-osaka.nvim",
+    lazy = false,
+    priority = 1000,
+    config = function(_, _)
+      require('solarized-osaka').setup({
+        transparent = true
+      })
+      vim.cmd([[colorscheme solarized-osaka]])
     end
   }
 }

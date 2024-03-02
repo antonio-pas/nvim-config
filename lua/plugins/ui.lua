@@ -1,5 +1,11 @@
 return {
   { "karb94/neoscroll.nvim",   opts = {} },
+  { "lukas-reineke/indent-blankline.nvim", main = "ibl", opts = {
+    indent = { char = "▏" },
+    scope = {
+      show_start = false
+    }
+  } },
   {
     "romgrk/barbar.nvim",
     init = function() vim.g.barbar_auto_setup = false end,
