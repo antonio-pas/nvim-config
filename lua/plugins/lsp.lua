@@ -7,9 +7,11 @@ return {
 		opts = {
 			servers = {
 				svelte = {},
+        prismals = {},
         pyright = {},
 				cssls = {},
 				eslint = {},
+        tailwindcss = {},
         ccls = {},
         html = {},
 				lua_ls = {

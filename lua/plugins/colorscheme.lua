@@ -29,5 +29,14 @@ return {
       })
       vim.cmd([[colorscheme solarized-osaka]])
     end
+  },
+  {
+    "cpea2506/one_monokai.nvim",
+    lazy = false,
+    config = function()
+      require('one_monokai').setup({
+        transparent = true
+      })
+    end
   }
 }

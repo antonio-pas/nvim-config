@@ -22,6 +22,7 @@ o.scrolloff = 10
 o.pumheight = 15
 o.timeout = true
 o.timeoutlen = 300
+o.smartindent = true
 
 -- ui changes
 o.completeopt = "noinsert,menuone,menu"

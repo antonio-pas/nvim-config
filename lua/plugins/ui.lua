@@ -1,11 +1,13 @@
 return {
-  { "karb94/neoscroll.nvim",   opts = {} },
-  { "lukas-reineke/indent-blankline.nvim", main = "ibl", opts = {
-    indent = { char = "▏" },
-    scope = {
-      show_start = false
-    }
-  } },
+  { "karb94/neoscroll.nvim", opts = {} },
+  { "lukas-reineke/indent-blankline.nvim", config = function()
+    require("ibl").setup({
+      indent = { char = "▏"},
+      scope = {
+        enabled = false,
+      }
+    })
+  end},
   {
     "romgrk/barbar.nvim",
     init = function() vim.g.barbar_auto_setup = false end,
@@ -15,7 +17,6 @@ return {
         separator = { left = "", right = "" },
         separator_at_end = false,
       },
-      sidebar_filetypes = { NvimTree = true }
     },
     config = function (_, opts)
       require("barbar").setup(opts)
@@ -26,24 +27,6 @@ return {
     end
   },
   { "lewis6991/gitsigns.nvim", opts = {} },
-  {
-    "nvim-tree/nvim-tree.lua",
-    opts = {
-      actions = {
-        open_file = {
-            quit_on_open = true,
-        },
-      },
-    },
-    config = function (_, opts)
-
-      require("nvim-tree").setup(opts)
-      require("which-key").register({
-        t = { "<cmd>NvimTreeToggle<cr>", "Toggle Tree" },
-        f = { "<cmd>NvimTreeFindFile<cr>", "Find Current File in Tree" },
-      }, { prefix = "<leader>r" })
-    end
-  },
   {
     "nvim-lualine/lualine.nvim",
     opts = {
