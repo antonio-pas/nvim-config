@@ -9,13 +9,13 @@ return {
     opts = {},
     config = function(_, _)
       local wk = require("which-key")
-      wk.register({
-        ["<leader>q"] = { "<cmd>qa<cr>", "Quit" },
-        ["<leader>l"] = { "<cmd>Telescope oldfiles<cr>", "Recent Files" }
+      wk.add({
+        { "<leader>l", "<cmd>Telescope oldfiles<cr>", desc = "Recent Files" },
+        { "<leader>q", "<cmd>qa<cr>", desc = "Quit" },
       })
-      wk.register({
-        ["<esc>"] = { "<C-\\><C-n>", "Escape" }
-      }, { mode = "t" })
+      wk.add({
+        { "<esc>", { "<C-\\><C-n>", "Escape" }, mode = "t" }
+      })
     end
   },
   {
@@ -24,39 +24,35 @@ return {
     config = function(opts, _)
       require("hop").setup(opts)
       local wk = require("which-key")
-      wk.register({
-        h = {
-          name = "hop",
-          w = { "<cmd>HopWord<cr>", "Hop Word" },
-          a = { "<cmd>HopAnywhere<cr>", { "Hop Anywhere" } }
-        }
-      }, { prefix = "<leader>" })
+      wk.add({
+        { "<leader>ha", desc = "<cmd>HopAnywhere<cr>" },
+        { "<leader>hw", "<cmd>HopWord<cr>", desc = "Hop Word" },
+      })
     end
   },
   {
     "nvim-telescope/telescope.nvim",
-    opts = {
-      defaults = {borderchars = {
-        --{ '─', '│', '─', '│', '┌', '┐', '┘', '└'},
-        prompt = { '─', '│', '─', '│', '┌', '┐', '┘', '└'},
-        results = { '─', '│', '─', '│', '┌', '┐', '┘', '└'},
-        preview = { '─', '│', '─', '│', '┌', '┐', '┘', '└'},
-      }}
-    },
+    opts = {},
+    -- opts = {
+    --   defaults = {borderchars = {
+    --     --{ '─', '│', '─', '│', '┌', '┐', '┘', '└'},
+    --     prompt = { '─', '│', '─', '│', '┌', '┐', '┘', '└'},
+    --     results = { '─', '│', '─', '│', '┌', '┐', '┘', '└'},
+    --     preview = { '─', '│', '─', '│', '┌', '┐', '┘', '└'},
+    --   }}
+    -- },
     config = function(_, opts)
       require("telescope").setup(opts)
       local t = require("telescope.builtin")
       local wk = require("which-key")
-      wk.register({
-        t = {
-          name = "telescope",
-          t = { "<cmd>Telescope<cr>", "Open Telescope" },
-          f = { t.find_files, "Find File" },
-          g = { t.live_grep, "Live Grep" },
-          h = { t.help_tags, "Help Tags" },
-          b = { t.buffers, "Buffer" },
-        },
-      }, { prefix = "<leader>" })
+      wk.add({
+        { "<leader>t", group = "telescope" },
+        { "<leader>tb", t.buffers, desc = "Buffer" },
+        { "<leader>tf", t.find_files, desc = "Find Files" },
+        { "<leader>tg", t.live_grep, desc = "Live Grep" },
+        { "<leader>th", t.help_tags, desc = "Help Tags" },
+        { "<leader>tt", "<cmd>Telescope<cr>", desc = "Open Telescope" },
+      })
     end
   }
 }

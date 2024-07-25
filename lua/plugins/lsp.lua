@@ -57,11 +57,6 @@ return {
 			},
 		},
 		config = function(_, opts)
-      local signs = { Error = " ", Warn = " ", Hint = " ", Info = " " }
-      for type, icon in pairs(signs) do
-        local hl = "DiagnosticSign" .. type
-        vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
-      end
       vim.diagnostic.config({
         virtual_text = {
           source = "if_many",
@@ -72,6 +67,26 @@ return {
         float = {
           source = "if_many",
         },
+        signs = {
+          text = {
+            [vim.diagnostic.severity.ERROR] = 'E',
+            [vim.diagnostic.severity.WARN] = 'W',
+            [vim.diagnostic.severity.HINT] = 'H',
+            [vim.diagnostic.severity.INFO] = 'I',
+          },
+          linehl = {
+            [vim.diagnostic.severity.ERROR] = 'DiagnosticSignError',
+            [vim.diagnostic.severity.WARN] = 'DiagnosticSignWarn',
+            [vim.diagnostic.severity.HINT] = 'DiagnosticSignHint',
+            [vim.diagnostic.severity.INFO] = 'DiagnosticSignInfo',
+          },
+          numhl = {
+            [vim.diagnostic.severity.ERROR] = 'DiagnosticSignError',
+            [vim.diagnostic.severity.WARN] = 'DiagnosticSignWarn',
+            [vim.diagnostic.severity.HINT] = 'DiagnosticSignHint',
+            [vim.diagnostic.severity.INFO] = 'DiagnosticSignInfo',
+          },
+        },
       })
 			local capabilities = vim.tbl_deep_extend(
 				"force",
@@ -80,31 +95,23 @@ return {
 				require("cmp_nvim_lsp").default_capabilities()
 			)
 			require("util").on_attach(function(_, buffer)
-        require("which-key").register({
-          d = {
-            name = "diagnostic",
-            a = { "<cmd>Telescope diagnostics<cr>", "Show All Diagnostics" },
-            o = { function() vim.diagnostic.open_float(nil, { scope="cursor" }) end, "Open Diagnostic On Current Line" },
-            n = { vim.diagnostic.get_next, "Go to Next Diagnostic" },
-            p = { vim.diagnostic.get_prev, "Go to Previous Diagnostic" },
-          },
-          g = {
-            name = "go to",
-            d = { vim.lsp.buf.definition, "Go to Definition" },
-            D = { vim.lsp.buf.definition, "Go to Declaration" }
-          },
-          a = {
-            name = "actions",
-            r = { vim.lsp.buf.rename, "Rename Token" },
-            f = { vim.lsp.buf.format, "Format Document" },
-            c = { vim.lsp.buf.code_action, "Code Action" },
-          },
-          i = {
-            name = "info",
-            h = { vim.lsp.buf.hover, "Hover Info" },
-            s = { vim.lsp.buf.signature_help, "Signature Help"}
-          }
-        }, { prefix = "<leader>", buffer = buffer })
+        require("which-key").add( {
+          { "<leader>a", group = "actions" },
+          { "<leader>ac", vim.lsp.buf.code_action, desc = "Code Action" },
+          { "<leader>af", vim.lsp.buf.format, desc = "Format Document" },
+          { "<leader>ar", vim.lsp.buf.rename, desc = "Rename Token" },
+          { "<leader>d", group = "diagnostic" },
+          { "<leader>da", "<cmd>Telescope diagnostics<cr>", desc = "Show All Diagnostics" },
+          { "<leader>dn", vim.diagnostic.get_next, desc = "Go to Next Diagnostic" },
+          { "<leader>do", vim.diagnostic.open_float, desc = "Open Diagnostic On Current Line" },
+          { "<leader>dp", vim.diagnostic.get_next, desc = "Go to Previous Diagnostic" },
+          { "<leader>g", group = "go to" },
+          { "<leader>gD", vim.lsp.buf.declaration, desc = "Go to Declaration" },
+          { "<leader>gd", vim.lsp.buf.definition, desc = "Go to Definition" },
+          { "<leader>i", group = "info" },
+          { "<leader>ih", vim.lsp.buf.hover, desc = "Hover Info" },
+          { "<leader>is", vim.lsp.buf.signature_help, desc = "Signature Help" },
+        })
 			end)
 			for name, server_options in pairs(opts.servers) do
 				local settings = vim.tbl_extend("force", server_options, { capabilities = capabilities })

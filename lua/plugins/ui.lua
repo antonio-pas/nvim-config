@@ -20,10 +20,10 @@ return {
     },
     config = function (_, opts)
       require("barbar").setup(opts)
-      require("which-key").register({
-        ["<C-p>"] = { "<cmd>BufferPrevious<cr>", "Previous buffer" },
-        ["<C-n>"] = { "<cmd>BufferNext<cr>", "Next buffer" },
-      }, {})
+      require("which-key").add( {
+        { "<C-n>", "<cmd>BufferNext<cr>", desc = "Next buffer" },
+        { "<C-p>", "<cmd>BufferPrevious<cr>", desc = "Previous buffer" },
+      })
     end
   },
   { "lewis6991/gitsigns.nvim", opts = {} },
