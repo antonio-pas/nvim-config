@@ -31,8 +31,10 @@ return {
       servers = {
         html = {},
         cssls = {},
+        clangd = {},
         ts_ls = {},
         rust_analyzer = {},
+        pyright = {},
         lua_ls = {}
       }
     },

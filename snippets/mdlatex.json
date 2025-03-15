@@ -1,0 +1,20 @@
+{
+  "fraction": {
+    "prefix": "fr",
+    "body": [
+      "\\frac{${1:1}}{${2:x}}"
+    ]
+  },
+  "limit": {
+    "prefix": "lim",
+    "body": [
+      "\\lim_{${1:h}\\to${2:0}}"
+    ]
+  },
+  "math": {
+    "prefix": "mk",
+    "body": [
+      "\\$\\$$0\\$\\$"
+    ]
+  }
+}
