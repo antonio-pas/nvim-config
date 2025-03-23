@@ -31,6 +31,7 @@ return {
       servers = {
         html = {},
         cssls = {},
+        tailwindcss = {},
         clangd = {},
         ts_ls = {},
         rust_analyzer = {},
